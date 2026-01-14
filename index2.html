@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FitPath – AI Fitness Coach</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(135deg, #f5f3ff, #eef2ff);
+  color: #111827;
+  overflow-x: hidden;
+}
+
+/* ================= BLOBS ================= */
+.blob {
+  position: fixed;
+  width: 320px;
+  height: 320px;
+  filter: blur(90px);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.blob-purple {
+  background: #a78bfa;
+  top: -120px;
+  left: -120px;
+}
+
+.blob-blue {
+  background: #60a5fa;
+  bottom: -120px;
+  right: -120px;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 60px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.navbar a:hover {
+  color: #7c3aed;
+}
+
+.theme-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ================= HERO ================= */
+.hero {
+  text-align: center;
+  padding: 100px 20px 120px;
+  backdrop-filter: blur(14px);
+}
+
+.badge {
+  display: inline-block;
+  background: #ede9fe;
+  color: #7c3aed;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  animation: pop 0.6s ease forwards;
+}
+
+.hero h1 {
+  font-size: clamp(38px, 6vw, 56px);
+  font-weight: 700;
+  margin-top: 26px;
+  line-height: 1.1;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.hero h1 span {
+  background: linear-gradient(to right, #8b5cf6, #3b82f6);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.hero p {
+  max-width: 620px;
+  margin: 24px auto;
+  font-size: 18px;
+  color: #6b7280;
+  animation: fadeUp 1s ease forwards;
+}
+
+.buttons {
+  margin-top: 34px;
+  animation: fadeUp 1.2s ease forwards;
+}
+
+/* ================= BUTTONS ================= */
+.btn-primary {
+  background: linear-gradient(to right, #8b5cf6, #3b82f6);
+  border: none;
+  padding: 14px 30px;
+  color: white;
+  border-radius: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 14px 35px rgba(139, 92, 246, 0.45);
+}
+
+.btn-secondary {
+  background: white;
+  border: 1px solid #e5e7eb;
+  padding: 14px 30px;
+  border-radius: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #f3f4f6;
+  transform: scale(1.05);
+}
+
+/* ================= SECTIONS ================= */
+.features {
+  padding: 90px 20px;
+  text-align: center;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(14px);
+}
+
+.features h2 {
+  font-size: 34px;
+}
+
+.subtitle {
+  margin-top: 14px;
+  color: #6b7280;
+}
+
+/* ================= CARDS ================= */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 26px;
+  max-width: 1100px;
+  margin: 60px auto 0;
+}
+
+.card {
+  background: rgba(255,255,255,0.75);
+  padding: 32px;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+.card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* ================= CHAT ================= */
+.chat {
+  max-width: 640px;
+  margin: 100px auto;
+  padding: 32px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(14px);
+}
+
+.chat h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.chat-box {
+  height: 230px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.chat-box p {
+  margin-bottom: 8px;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  outline: none;
+}
+
+.chat-input button {
+  padding: 12px 22px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(to right, #8b5cf6, #3b82f6);
+  color: white;
+  cursor: pointer;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  text-align: center;
+  padding: 36px 20px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ================= DARK MODE ================= */
+body.dark {
+  background: linear-gradient(135deg, #020617, #020617);
+  color: #e5e7eb;
+}
+
+body.dark .hero,
+body.dark .features,
+body.dark .chat,
+body.dark .card {
+  background: rgba(17,24,39,0.85);
+}
+
+body.dark p,
+body.dark a {
+  color: #c7d2fe;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 20px;
+  }
+
+  .navbar nav {
+    gap: 16px;
+  }
+
+  .hero {
+    padding: 80px 16px;
+  }
+
+  .features {
+    padding: 70px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    margin: 0;
+  }
+}
+/* ========== PREMIUM GLASS WORKOUT SECTION ========== */
+
+#workout {
+  position: relative;
+  padding: 120px 20px;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(139,92,246,0.08),
+    rgba(59,130,246,0.08)
+  );
+  backdrop-filter: blur(20px);
+}
+/* Liquid Blobs */
+#workout::before,
+#workout::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.55;
+  z-index: 0;
+}
+
+#workout::before {
+  background: #8b5cf6;
+  top: -120px;
+  left: -120px;
+}
+
+#workout::after {
+  background: #3b82f6;
+  bottom: -120px;
+  right: -120px;
+}
+/* Glass Workout Cards */
+#workout .card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  transition: all 0.45s ease;
+}
+
+#workout .card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow:
+    0 30px 70px rgba(139,92,246,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+}
+#workout h2 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(32px, 5vw, 42px);
+  background: linear-gradient(to right, #8b5cf6, #3b82f6);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+#workout .subtitle {
+  position: relative;
+  z-index: 1;
+  font-size: 17px;
+}
+body.dark #workout {
+  background: linear-gradient(
+    135deg,
+    rgba(15,23,42,0.9),
+    rgba(2,6,23,0.9)
+  );
+}
+
+body.dark #workout .card {
+  background: rgba(17,24,39,0.65);
+  border-color: rgba(255,255,255,0.08);
+}
+
+body.dark #workout::before {
+  background: #6366f1;
+}
+
+body.dark #workout::after {
+  background: #0ea5e9;
+}
+/* === ANIMATED LIQUID BLOBS === */
+#workout::before,
+#workout::after {
+  animation: blobMove 18s ease-in-out infinite alternate;
+}
+
+#workout::after {
+  animation-delay: 6s;
+}
+
+@keyframes blobMove {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(120px, -80px) scale(1.15);
+  }
+  100% {
+    transform: translate(-100px, 100px) scale(0.95);
+  }
+}
+/* === RIPPLE GLOW EFFECT === */
+#workout .card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    rgba(139,92,246,0.25),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#workout .card:hover::after {
+  opacity: 1;
+}
+/* === AI BADGE === */
+.ai-badge {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #8b5cf6, #3b82f6);
+  color: white;
+  box-shadow: 0 0 20px rgba(139,92,246,0.6);
+}
+/* ===== PREMIUM BLOBS FOR TIMER & AI ===== */
+#tracker,
+#ai {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Blobs */
+#tracker::before,
+#tracker::after,
+#ai::before,
+#ai::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.45;
+  z-index: 0;
+  animation: blobFloat 20s ease-in-out infinite alternate;
+}
+
+#tracker::before {
+  background: #8b5cf6;
+  top: -120px;
+  left: -120px;
+}
+
+#tracker::after {
+  background: #3b82f6;
+  bottom: -120px;
+  right: -120px;
+  animation-delay: 6s;
+}
+
+#ai::before {
+  background: #8b5cf6;
+  top: -140px;
+  right: -120px;
+}
+
+#ai::after {
+  background: #ec4899;
+  bottom: -140px;
+  left: -120px;
+  animation-delay: 8s;
+}
+
+@keyframes blobFloat {
+  0% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(120px,-80px) scale(1.15); }
+  100% { transform: translate(-100px,100px) scale(0.95); }
+}
+/* ===== GLASS + RIPPLE CARDS ===== */
+#tracker .card,
+#ai {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.12);
+}
+
+/* Ripple */
+#tracker .card::after,
+#ai::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    rgba(59,130,246,0.35),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#tracker .card:hover::after,
+#ai:hover::after {
+  opacity: 1;
+}
+/* ===== AI BADGE ===== */
+.ai-badge {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #8b5cf6, ##8b5cf6);
+  color: white;
+  box-shadow: 0 0 25px #8b5cf6;
+}
+
+
+  </style>
+</head>
+<body>
+
+<!-- BLOBS -->
+<div class="blob blob-purple"></div>
+<div class="blob blob-blue"></div>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">FitPath</div>
+  <nav>
+    <a href="#workout">Workouts</a>
+    <a href="#tracker">Tracker</a>
+    <a href="#ai">AI Coach</a>
+    <button id="themeToggle" class="theme-btn">🌙</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="badge">💪 AI-Powered Fitness Coaching</span>
+
+  <h1>
+    Transform your <span>body</span><br>
+    start today
+  </h1>
+
+  <p>
+    Train smarter with structured workouts, real-time timers,
+    calorie tracking and an AI fitness coach built for results.
+  </p>
+
+  <div class="buttons">
+    <button class="btn-primary" onclick="scrollToWorkout()">Start Workout →</button>
+    <button class="btn-secondary">View Exercises</button>
+  </div>
+</section>
+
+<!-- WORKOUT SECTION -->
+<section id="workout" class="features">
+
+  <h2>Strength Training Workouts</h2>
+  <p class="subtitle">
+    Real exercises for muscle growth and strength
+  </p>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>Chest</h3>
+      <ul>
+        <li>Push-Ups</li>
+        <li>Bench Press</li>
+        <li>Incline Dumbbell Press</li>
+        <li>Chest Dips</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Triceps</h3>
+      <ul>
+        <li>Triceps Dips</li>
+        <li>Close-Grip Push-Ups</li>
+        <li>Overhead Triceps Extension</li>
+        <li>Skull Crushers</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Biceps</h3>
+      <ul>
+        <li>Dumbbell Curls</li>
+        <li>Hammer Curls</li>
+        <li>Barbell Curls</li>
+        <li>Concentration Curls</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Shoulders</h3>
+      <ul>
+        <li>Overhead Press</li>
+        <li>Lateral Raises</li>
+        <li>Front Raises</li>
+        <li>Arnold Press</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- TRACKER -->
+<section class="features" id="tracker">
+  <h2>Workout Timer & Calories</h2>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Workout Timer</h3>
+      <p id="timer">00:00</p>
+      <button class="btn-primary" onclick="startTimer()">Start</button>
+      <button class="btn-secondary" onclick="stopTimer()">Stop</button>
+    </div>
+
+    <div class="card">
+      <h3>Calories Burned</h3>
+      <p id="calories">0 kcal</p>
+      <p>Based on strength training MET values</p>
+    </div>
+  </div>
+</section>
+
+<!-- AI COACH -->
+<section class="chat" id="ai">
+  <span class="ai-badge">AI Recommended</span>
+  <span class="ai-badge">AI Live Coach</span>
+  <h2>AI Fitness Coach</h2>
+  <div class="chat-box" id="chatBox"></div>
+
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Ask workout or fat loss question..." />
+    <button onclick="startVoice()">🎤</button>
+    <button onclick="sendMessage()">Ask</button>
+  </div>
+</section>
+
+<footer>
+  © 2026 FitPath – Train Smart. Stay Strong.
+</footer>
+<script>
+  
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.add("show");
+  });
+});
+
+/*************************************************
+ * CONFIG
+ *************************************************/
+const API_KEY = "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"; // sk-xxxxxx
+
+
+/*************************************************
+ * DOM READY (VERY IMPORTANT)
+ *************************************************/
+document.addEventListener("DOMContentLoaded", () => {
+
+  /******** THEME TOGGLE ********/
+  const themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      themeBtn.textContent =
+        document.body.classList.contains("dark") ? "☀️" : "🌙";
+    });
+  }
+
+});
+
+
+/*************************************************
+ * SMOOTH SCROLL
+ *************************************************/
+function scrollToWorkout() {
+  const section = document.getElementById("workout");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+
+/*************************************************
+ * WORKOUT TIMER + CALORIES
+ *************************************************/
+let timerInterval = null;
+let seconds = 0;
+let calories = 0;
+
+function startTimer() {
+  if (timerInterval) return;
+
+  timerInterval = setInterval(() => {
+    seconds++;
+
+    const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const sec = String(seconds % 60).padStart(2, "0");
+
+    document.getElementById("timer").innerText = `${min}:${sec}`;
+
+    calories += 6 / 60; // avg strength training
+    document.getElementById("calories").innerText =
+      calories.toFixed(1) + " kcal";
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+
+/*************************************************
+ * AI FITNESS COACH (BEARER INCLUDED)
+ *************************************************/
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
+  const message = input.value.trim();
+  if (!message) return;
+
+  chatBox.innerHTML += `<div><b>You:</b> ${message}</div>`;
+  input.value = "";
+
+  const typing = document.createElement("div");
+  typing.innerHTML = "<i>AI is thinking...</i>";
+  chatBox.appendChild(typing);
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + API_KEY
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a fitness coach. Reply in Hinglish with safe workout advice."
+          },
+          {
+            role: "user",
+            content: message
+          }
+        ]
+      })
+    });
+
+    const data = await res.json();
+    typing.remove();
+
+    chatBox.innerHTML +=
+      `<div><b>AI:</b> ${data.choices?.[0]?.message?.content || "No reply"}</div>`;
+  } catch (e) {
+    typing.remove();
+    chatBox.innerHTML +=
+      "<div><b>AI:</b> ❌ Connection error</div>";
+  }
+}
+
+
+/*************************************************
+ * VOICE INPUT
+ *************************************************/
+function startVoice() {
+  if (!("webkitSpeechRecognition" in window)) {
+    alert("Voice not supported");
+    return;
+  }
+
+  const rec = new webkitSpeechRecognition();
+  rec.lang = "en-IN";
+  rec.start();
+
+  rec.onresult = e => {
+    document.getElementById("userInput").value =
+      e.results[0][0].transcript;
+  };
+}
+
+document.querySelectorAll("#workout .card").forEach(card => {
+  card.addEventListener("mousemove", e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--x", `${e.clientX - rect.left}px`);
+    card.style.setProperty("--y", `${e.clientY - rect.top}px`);
+  });
+});
+
+["#tracker .card", "#ai"].forEach(selector => {
+  document.querySelectorAll(selector).forEach(el => {
+    el.addEventListener("mousemove", e => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty("--x", `${e.clientX - r.left}px`);
+      el.style.setProperty("--y", `${e.clientY - r.top}px`);
+    });
+  });
+});
+
+const revealObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+        revealObserver.unobserve(entry.target); // 🔥 VERY IMPORTANT
+      }
+    });
+  },
+  {
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px"
+  }
+);
+
+document.querySelectorAll(".card").forEach(card => {
+  revealObserver.observe(card);
+});
+
+</script>
+<script src="script.js"></script>
+</body>
+</html>
